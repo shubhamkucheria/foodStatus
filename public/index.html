@@ -1,0 +1,124 @@
+<!doctype html>
+
+<!-- ASSIGN OUR ANGULAR MODULE -->
+<html ng-app="shubhamDalviroo">
+<head>
+	<!-- META -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
+
+	<title>Kitchen Display System</title>
+
+	<!-- SCROLLS -->
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<style>
+		html 					{ overflow-y:scroll; }
+		table, th , td  		{ border: 1px solid grey; border-collapse: collapse; padding: 5px; }
+		table tr:nth-child(odd) { background-color: #f1f1f1; }
+		table tr:nth-child(even) { background-color: #ffffff; }
+		footer {
+			    background-color: #555;
+			    color: white;
+			    padding-top: 10px;
+			    padding-bottom: 0px;
+			    position:fixed;
+			    bottom:0;
+			    width:100%;
+			}
+		header {
+			background-color: #555;
+			top: 0;
+			color: white;
+		  	flex-shrink: 0;
+			height: 50px;
+		  	line-height: 50px;
+		  	text-align: center;
+		}
+
+	</style>
+
+	<!-- SPELLS -->
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script><!-- load angular -->
+	<script src="js/controllers/main.js"></script> <!-- load up our controller -->
+	<script src="js/services/food.js"></script> <!-- load our todo service -->
+	<script src="js/core.js"></script> <!-- load our main application -->
+
+</head>
+<!-- SET THE CONTROLLER -->
+<body ng-controller="mainController">
+	<header>
+		<i class="fa fa-cutlery" aria-hidden="true"> Dalviroo </i>
+		<i class="fa fa-lemon-o" aria-hidden="true"></i>
+	</header>
+	<div class="container">
+		<div class="jumbotron text-center">
+			<i class="fa fa-cutlery" aria-hidden="true"> Dalviroo </i>
+			<i class="fa fa-lemon-o" aria-hidden="true"></i>
+			<h4>Total Food Items : <span class="label label-info">{{ food.length }}</span></h4>
+			<button class="btn btn-primary btn-lg" ng-click="ReportGen()">Generate Report</button>
+		</div>
+
+		<div class="row">
+		 	<div class="col-sm-4">
+		 		<form>
+					<div ng-if="!editFunction" class="form-group">
+						<!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
+						<input type="text" class="form-control input-lg text-center" placeholder="Food" ng-model="formData.text">
+						<input type="number" class="form-control input-lg text-center" placeholder="Quantity" ng-model="formData.quantity">
+						<input type="number" class="form-control input-lg text-center" placeholder="Predicted" ng-model="formData.predicted">
+						<input type="number" class="form-control input-lg text-center" placeholder="Created Till Now" ng-model="formData.createdTillNow">
+					</div>
+					<div ng-if="editFunction" class="form-group">
+						Food: <input type="text" class="form-control input-lg text-center" ng-model="formData.text">
+						Quantity: <input type="number" class="form-control input-lg text-center"  ng-model="formData.quantity">
+						Predicted: <input type="number" class="form-control input-lg text-center" ng-model="formData.predicted">
+						Created Till Now: <input type="number" class="form-control input-lg text-center" ng-model="formData.createdTillNow">
+					</div>
+					<button ng-if="!editFunction" type="submit" class="btn btn-primary btn-lg" ng-click="createFood()">Add</button>
+					<button ng-if="editFunction" type="submit" class="btn btn-primary btn-lg" ng-click="update()">Update</button>
+				</form>
+
+		  	</div>
+		  	<div ng-if="food.length > 0" class="col-sm-4">
+		  		<table>
+					<tr>
+						<td>{{ 'Index' }}</td>
+				    	<td>{{ 'Food Item' }}</td>
+				    	<td>{{ 'Quantity' }}</td>
+				    	<td>{{'Created Till Now' }}</td>
+				    	<td>{{ 'Predicted' }}</td>
+				    	<td>{{ 'Update' }}</td>
+				    	<td>{{ 'Delete' }}</td>
+				    	<td>{{ 'Status'}}</td>
+				  </tr>
+				  <tr ng-repeat="todo in food">
+				    <td>{{ $index + 1 }}</td>
+				    <td>{{ todo.text  }}</td>
+				    <td>{{ todo.quantity  }}</td>
+				    <td>{{ todo.createdTillNow  }}</td>
+				    <td>{{ todo.predicted  }}</td>
+				    <td><button type="button" ng-click="edit(todo)">U</button></td>
+				    <td><button type="button" ng-click="deleteTodo(todo._id)">X</button></td>
+				    <td ng-if="todo.predicted ===todo.createdTillNow"><i class="fa fa-check" aria-hidden="true"></i></td>
+				    <td ng-if="todo.predicted > todo.createdTillNow"><i class="fa fa-times" aria-hidden="true"></i></td>
+				    <td ng-if="todo.predicted < todo.createdTillNow"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+				  </tr>
+				</table>
+			</div>
+		</div>
+
+	<p class="text-center" ng-show="loading">
+		<span class="fa fa-spinner fa-spin fa-3x"></span>
+	</p>
+
+
+	</div>
+	<footer class="container-fluid text-center">
+		<p> Awesome on-demand food delivery company </p>
+		<p> Made with <i class="fa fa-heart" aria-hidden="true"></i> & cheese</p>
+	</footer>
+
+
+</body>
+</html>
